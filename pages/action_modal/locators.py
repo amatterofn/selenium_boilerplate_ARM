@@ -10,14 +10,19 @@ CANCEL_BUTTON = {
     'value': '.actions-modal__footer .btn-default'
 }
 
-DELETE_BUTTON = {
-    'by': By.CSS_SELECTOR,
-    'value': '.actions-modal__footer .btn-danger'
-}
-
 CLOSE_ICON = {
     'by': By.CSS_SELECTOR,
     'value': '.modal-header .close'
+}
+
+END_DATE = {
+    'by': By.ID,
+    'value': 'create-action-modal-end-date'
+}
+
+END_TIME = {
+    'by': By.ID,
+    'value': 'create-action-modal-end-time'
 }
 
 ISSUE = {
@@ -50,11 +55,6 @@ LINKED_ITEM_INPUT = {
     'value': 'linked-items-selectize-selectized'
 }
 
-ATTENDEE_INPUT = {
-    'by': By.ID,
-    'value': 'actions-modal__attendees-selectized'
-}
-
 MODAL_HEADER = {
     'by': By.CLASS_NAME,
     'value': 'modal-title'
@@ -71,33 +71,18 @@ SELECT_ACTION_TYPE = {
 }
 
 START_DATE = {
-    'by': By.XPATH,
-    'value': '//input[@id="create-action-modal-start-date" or @id="edit-action-start-date"]'
+    'by': By.ID,
+    'value': 'create-action-modal-start-date'
 }
 
 START_TIME = {
-    'by': By.XPATH,
-    'value': '//input[@id="create-action-modal-start-time" or @id="edit-action-start-time"]'
-}
-
-END_DATE = {
-    'by': By.XPATH,
-    'value': '//input[@id="create-action-modal-end-date" or @id="edit-action-end-date"]'
-}
-
-END_TIME = {
-    'by': By.XPATH,
-    'value': '//input[@id="create-action-modal-end-time" or @id="edit-action-end-time"]'
+    'by': By.ID,
+    'value': 'create-action-modal-start-time'
 }
 
 SUMMARY_SECTION = {
     'by': By.CSS_SELECTOR,
     'value': '.summary'
-}
-
-ADDED_ATTENDEE_INPUT = {
-    'by': By.ID,
-    'value': 'attendees-selectize-selectized'
 }
 
 
@@ -119,11 +104,4 @@ def linked_item_by_linked_item_text(linked_item_text):
     return {
         'by': By.XPATH,
         'value': f'//div[contains(@class, "option") and contains(string(), "{linked_item_text}")]'
-    }
-
-
-def attendee_by_attendee_text(attendee_text):
-    return {
-        'by': By.XPATH,
-        'value': f'//div[contains(@class, "option") and contains(string(), "{attendee_text}")]'
     }

@@ -5,6 +5,10 @@ services:
     image: selenium/hub:3.10.0
     ports:
       - 4444:4444
+    environment:
+      - GRID_BROWSER_TIMEOUT=100000
+      - GRID_TIMEOUT=100000
+      - SE_OPTS=-browserTimeout 100 -timeout 100
 
   chrome1:
     image: selenium/node-chrome-debug

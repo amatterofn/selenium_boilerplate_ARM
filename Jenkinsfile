@@ -2,6 +2,7 @@ pipeline {
     agent {
         docker {
             image 'python:3.7.2'
+            args '--add-host=dev.fiscalnote.com:34.193.229.138 --add-host=staging.fiscalnote.com:34.234.18.56'
         }
     }
     stages {
@@ -19,21 +20,8 @@ pipeline {
                 sh '''
                 bash
                 . venv/bin/activate
-                pytest --browser chrome-remote --html=reports/ui_login.html --log-cli-level INFO
+                pytest -m debug --browser chrome-remote
                 '''
-            }
-            post {
-                always {
-                    publishHTML([
-                        allowMissing: false,
-                        alwaysLinkToLastBuild: false,
-                        keepAll: false,
-                        reportDir: 'reports',
-                        reportFiles: 'ui_login.html',
-                        reportName: 'Test Results',
-                        reportTitles: 'CQ Login Test Results'
-                    ])
-                }
             }
         }
     }

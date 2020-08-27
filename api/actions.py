@@ -137,13 +137,3 @@ def get_all_actions(authorization_header, page=1, per=100):
     )
 
     return get_all_actions_response.json()['results']
-
-
-def delete_action_by_id(authorization_header, action_id):
-    logging.info(f'Attempting to delete action with ID {action_id}')
-    delete_response = requests.delete(f'{ACTIONS_ENDPOINT}/{action_id}', headers=authorization_header)
-    if delete_response.status_code == 200:
-        logging.info('Successfully deleted action.')
-        logging.info(delete_response.elapsed)
-    else:
-        logging.info('Failed to delete action.')

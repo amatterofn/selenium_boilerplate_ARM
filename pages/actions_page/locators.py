@@ -25,16 +25,6 @@ DELETE_BUTTON = {
     'value': '//span[contains(text(), "Delete")]//ancestor::button'
 }
 
-SEE_ACTIONS_SUMMARY_LINK = {
-    'by': By.XPATH,
-    'value': '//button[contains(string(),"See Actions Summary")]'
-}
-
-START_DATE_FILTER_BUTTON = {
-    'by': By.XPATH,
-    'value': '//span[contains(text(),"Start")]'
-}
-
 EMPTY_STATE_ADD_ACTION_BUTTON = {
     'by': By.CSS_SELECTOR,
     'value': '.actions-search__empty-content button'
@@ -50,9 +40,9 @@ LOAD_MORE = {
     'value': 'actions-search__load-more'
 }
 
-ACTION_SUMMARY_TEXT = {
+SEE_ACTIONS_SUMMARY_LINK = {
     'by': By.CSS_SELECTOR,
-    'value': '.actions-row_summary-col'
+    'value': '.actions-summary-bar button'
 }
 
 SELECT_DROPDOWN = {
@@ -76,14 +66,14 @@ def action_attendees_by_position(position):
 def action_checkbox_by_action_summary(action_summary):
     return {
         'by': By.XPATH,
-        'value': f'//td[contains(@class,"actions-row__summary-col")]//p[contains(text(), "{action_summary}")]//ancestor::tr//div[contains(@class,"actions-row__checkbox")]'
+        'value': f'//td[contains(@class, "actions-row__summary-col")]//p[contains(text(), "{action_summary}")]//ancestor::tr//div[contains(@class, "actions-row__checkbox")]'
     }
 
 
 def action_checkbox_by_position(position):
-    return{
+    return {
         'by': By.XPATH,
-        'value': f'(//tr[contains(@class,"actions-row__info")])[{position}]//div[contains(@class,"actions-row__checkbox")]'
+        'value': f'(//tr[contains(@class, "actions-row__info")])[{position}]//div[contains(@class, "actions-row__checkbox")]'
     }
 
 
@@ -129,6 +119,36 @@ def action_summary_by_position(position):
     }
 
 
+def actions_filter_by_filter_text(filter_text):
+    return {
+        'by': By.XPATH,
+        'value': f'//div[contains(@class, "actions-list-header")]//span[contains(text(), "{filter_text}")]//ancestor::span[contains(@class, "fn-popover__trigger")]'
+    }
+
+
+# Needed to add the end_or_start locator to the following three locators since the locator would otherwise find duplicate
+# locators for the start/end filters.
+def date_by_date_text(end_or_start, desired_date):
+    return {
+        'by': By.XPATH,
+        'value': f'//div[@id="fn-calendar-widget-{end_or_start}"]//div[contains(@class, "pmu-days")]//div[contains(@class, "pmu-button") and not(contains(@class, "pmu-not-in-month")) and text()="{desired_date}"]'
+    }
+
+
+def date_filter_apply_button(end_or_start):
+    return {
+        'by': By.XPATH,
+        'value': f'//div[@id="fn-calendar-widget-{end_or_start}"]//ancestor::div[contains(@class, "popover-content")]//button[contains(text(), "Apply")]'
+    }
+
+
+def date_filter_previous_next(end_or_start, previous_next):
+    return {
+        'by': By.CSS_SELECTOR,
+        'value': f'#fn-calendar-widget-{end_or_start} .pmu-{previous_next}'
+    }
+
+
 def delete_action_icon_by_position(position):
     return {
         'by': By.XPATH,
@@ -140,20 +160,4 @@ def select_dropdown_option_by_option_text(option_text):
     return {
         'by': By.XPATH,
         'value': f'//span[contains(@class, "content-table__select-all")]//li//a[contains(text(), "{option_text}")]'
-    }
-
-
-
-
-
-def action_linked_items_by_position(position):
-    return{
-        'by': By.XPATH,
-        'value': f'//tr[contains(@class, "actions-row__info")][{position}]//td[contains(@class, "actions-row__associated-items")]//div[contains(@class, "trunk8-original")]//span[contains(@class, "actions-pane__item-badge")]'
-    }
-
-def action_edit_button_by_position(position):
-    return{
-        'by': By.XPATH,
-        'value': f'//tr[contains(@class, "actions-row__info")][{position}]//td[contains(@class, "actions-row__modify")]//i[contains(@class, "ion-edit")]'
     }

@@ -1,11 +1,21 @@
+import json
+import os
 import pytest
 
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
+from pages import (
+    ActionModal,
+    ActionsPage,
+    ActionSummaryModal,
+    ConfirmationModal,
+    DeleteActionModal,
+    HomePage,
+    LoginPage,
+    TopSearch
+)
 from tests import config
-from pages import LoginPage, HomePage, ActionsPage, ActionsSummaryModal, ActionModal, ConfirmationModal, TopSearch
 
 
 def pytest_addoption(parser):
@@ -32,7 +42,7 @@ def pytest_addoption(parser):
 
 
 def get_driver(desired_browser):
-    SELENIUM_GRID_IP_ADDRESS = '206.189.181.225'
+    SELENIUM_GRID_IP_ADDRESS = 'selenium-grid.mgmt.fiscalnote.com'
 
     if desired_browser == 'chrome':
         driver = webdriver.Remote(
@@ -77,14 +87,27 @@ def driver(request):
     return _driver
 
 
-@pytest.fixture
-def login_page(driver):
-    return LoginPage(driver)
+@pytest.fixture(scope='session')
+def authenticated_driver(home_page, login_page):
+    login_page.login(os.getenv('ENV_USERNAME'), os.getenv('ENV_PASSWORD'))
+
+    assert "Welcome" in home_page.welcome_message
+
+
+@pytest.fixture(scope='session')
+def auth_header(driver):
+    ember_simple_auth = json.loads(driver.execute_script('return localStorage.getItem("ember_simple_auth:session");'))
+    user_email = ember_simple_auth['authenticated']['userEmail']
+    user_token = ember_simple_auth['authenticated']['userToken']
+
+    return {
+        'Authorization': f'Token user_token="{user_token}", user_email="{user_email}"'
+    }
 
 
 @pytest.fixture
-def home_page(driver):
-    return HomePage(driver)
+def action_modal(driver):
+    return ActionModal(driver)
 
 
 @pytest.fixture
@@ -94,17 +117,27 @@ def actions_page(driver):
 
 @pytest.fixture
 def actions_summary_modal(driver):
-    return ActionsSummaryModal(driver)
-
-
-@pytest.fixture
-def action_modal(driver):
-    return ActionModal(driver)
+    return ActionSummaryModal(driver)
 
 
 @pytest.fixture
 def confirmation_modal(driver):
     return ConfirmationModal(driver)
+
+
+@pytest.fixture
+def delete_action_modal(driver):
+    return DeleteActionModal(driver)
+
+
+@pytest.fixture(scope='session')
+def home_page(driver):
+    return HomePage(driver)
+
+
+@pytest.fixture(scope='session')
+def login_page(driver):
+    return LoginPage(driver)
 
 
 @pytest.fixture
