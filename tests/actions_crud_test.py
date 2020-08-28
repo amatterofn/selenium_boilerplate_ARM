@@ -135,8 +135,7 @@ class TestActionsCRUD:
         logging.info('Verifying Action Modal is no longer visible.')
         assert action_modal.is_not_displayed
 
-    # @pytest.mark.debug
-    # @pytest.mark.parametrize("iteration", list(range(10)))
+    @pytest.mark.debug
     def test_user_can_create_a_new_action(self, action_modal, actions_page, auth_header):
         actions_page.click_add_action_button()
 
@@ -147,7 +146,7 @@ class TestActionsCRUD:
         action_modal.set_action_type('Phone Call')
         action_modal.add_linked_item('US HR 1478', 'US - HR 1478')
         action_modal.add_labels(('agriculture', 'farming', 'welfare'))
-        # action_modal.add_issue('Agriculture')
+        action_modal.add_issue('Agriculture')
 
         action_summary_text = f'{get_date()} {get_timestamp()} - This is my summary text.'
         action_modal.add_summary(action_summary_text)
